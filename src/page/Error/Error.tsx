@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Button, Container, Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
+import Navbar from "../../Components/Navbar/Navbar.tsx";
 
 export default function Error() {
     return (
@@ -13,7 +14,9 @@ export default function Error() {
                 minHeight: '100vh'
             }}
         >
+
             <Container maxWidth="md">
+                <Navbar/>
                 <Grid container spacing={2}>
                     <Grid xs={6}>
                         <Typography variant="h1">

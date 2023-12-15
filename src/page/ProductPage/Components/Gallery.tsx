@@ -1,72 +1,68 @@
 import React, { useState, useEffect } from "react";
-import BackdropGallery from "./BackdropGallery.tsx";
+import { ProductDetailDto } from "../../../data/ProductDto.ts";
 
-import prod1 from "../../../Pictures/image-product-1.jpg";
-import prod2 from "../../../Pictures/image-product-2.jpg";
-import prod3 from "../../../Pictures/image-product-3.jpg";
+type Props = {
+  productDetail: ProductDetailDto;
+}
 
-import thumb1 from "../../../Pictures/image-product-1-thumbnail.jpg";
-import thumb2 from "../../../Pictures/image-product-2-thumbnail.jpg";
-import thumb3 from "../../../Pictures/image-product-3-thumbnail.jpg";
-
-const IMAGES = [prod1, prod2, prod3];
-const THUMBS = [thumb1, thumb2, thumb3];
-
-const Gallery = () => {
-  const [currentImage, setCurrentImage] = useState(prod1);
-  const [currentPassedImage, setCurrentPassedImage] = useState(prod1);
+const Gallery = ({ productDetail }: Props) => {
+  const [currentImage, setCurrentImage] = useState<string | undefined>(productDetail.image_url);
+  const [currentPassedImage, setCurrentPassedImage] = useState<string | undefined>();
 
   const [open, setOpen] = useState(false);
-  const handleClick = (index) => {
+
+  // Assuming you want to use the same image URL for all images in the gallery for now
+  const IMAGES = [productDetail.image_url, productDetail.image_url, productDetail.image_url];
+  const THUMBS = [productDetail.image_url, productDetail.image_url, productDetail.image_url];
+
+  const handleClick = (index: number) => {
     setCurrentImage(IMAGES[index]);
   };
+
   const handleToggle = () => {
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
   };
-  const removeActivatedClass = (parent) => {
+
+  const removeActivatedClass = (parent: HTMLElement) => {
     parent.childNodes.forEach((node) => {
-      node.childNodes[0].classList.contains("activated") &&
-        node.childNodes[0].classList.remove("activated");
+      const element = node as HTMLElement;
+      element.firstChild && element.firstChild.classList.contains("activated") &&
+      element.firstChild.classList.remove("activated");
     });
   };
+
   useEffect(() => {
     setCurrentPassedImage(currentImage);
   }, [currentImage]);
 
   return (
-    <section className="gallery-holder hide-in-mobile">
-      <section className="gallery">
-        <div className="image">
-          <img src={currentImage} alt="product-1" onClick={handleToggle} />
-        </div>
-        <BackdropGallery
-          handleClose={handleClose}
-          open={open}
-          currentPassedImage={currentPassedImage}
-        />
-        <div className="thumbnails">
-          {THUMBS.map((th, index) => {
-            return (
-              <div
-                className="img-holder"
-                key={index}
-                onClick={(e) => {
-                  handleClick(index);
-                  removeActivatedClass(e.currentTarget.parentNode);
-                  e.currentTarget.childNodes[0].classList.toggle("activated");
-                }}
-              >
-                <div className={`outlay ${index === 0 && "activated"}`}></div>
-                <img src={th} alt={`product-${index + 1}`} />
-              </div>
-            );
-          })}
-        </div>
+      <section className="gallery-holder hide-in-mobile">
+        <section className="gallery">
+          <div className="image">
+            <img src={currentImage} alt="product-display" onClick={handleToggle} />
+          </div>
+          <div className="thumbnails">
+            {THUMBS.map((th, index) => (
+                <div
+                    className="img-holder"
+                    key={index}
+                    onClick={(e) => {
+                      handleClick(index);
+                      removeActivatedClass(e.currentTarget.parentNode as HTMLElement);
+                      e.currentTarget.childNodes[0].classList.toggle("activated");
+                    }}
+                >
+                  <div className={`outlay ${index === 0 ? "activated" : ""}`}></div>
+                  <img src={th} alt={`product-thumbnail-${index + 1}`} />
+                </div>
+            ))}
+          </div>
+        </section>
       </section>
-    </section>
   );
 };
 

@@ -9,9 +9,8 @@ import {
     styled,
     Typography,
 } from "@mui/material";
-import { Box } from "@mui/system";
-import products from '../../../api/api.ts'
-import { Link, useParams } from "react-router-dom";
+import { Link,} from "react-router-dom";
+import {ProductDto} from "../../../data/ProductDto.ts";
 
 const StyledCard = styled(Card)({
     backgroundColor:'#8bc34a',
@@ -29,27 +28,18 @@ const StyledTypography = styled(Typography)({
     WebkitBoxOrient: "vertical",
     fontFamily: "Kumbh Sans"
 });
-
-const Products = () => {
-    const {id} = useParams()
+type Props = {
+    product: ProductDto;
+}
+const Products = ({product}:Props) => {
     return (
-        <Box sx={{ marginTop: "20px" }}>
-            <Typography
-                variant="h4"
-                sx={{ textAlign: "center", marginBottom: "20px", fontFamily: "Kumbh Sans", }}
-            >
-                Products
-            </Typography>
-
-            <Grid container>
-                {products.slice(0,10).map((product) => (
-                    <Grid item md={3} sm={4} xs={12} key={product.id} >
-                        <Link to={`/products/${id}}`} style={{textDecoration:'none'}}>
+                    <Grid item md={3} sm={4} xs={12} key={product.pid} >
+                        <Link to={`/product/${product.pid}`} style={{textDecoration:'none'}}>
                             <StyledCard sx={{ maxWidth: 345, m:{xs:2,sm:1}  }}>
                                 <CardMedia
                                     component="img"
                                     height="260"
-                                    image={product.image}
+                                    image={product.image_url}
                                     alt="green iguana"
                                     sx={{p:1, backgroundRepeat: "no-repeat",
                                         backgroundPosition: "center",
@@ -58,20 +48,20 @@ const Products = () => {
                                 />
                                 <CardContent sx={{height:'80px'}}>
                                     <StyledTypography gutterBottom variant="h5" component="div">
-                                        {product.title}
+                                        {product.name}
                                     </StyledTypography>
                                 </CardContent>
                                 <StyledTypography>
                                 <CardActions sx={{display:'flex', justifyContent:'space-between'}}>
                                     <Button size="small" >HKD {product.price}</Button>
+                                    <Button size="small">
+                                        {product.has_stock ? "has stock" : "out of stock"}
+                                    </Button>
                                 </CardActions>
                                 </StyledTypography>
                             </StyledCard>
                         </Link>
                     </Grid>
-                ))}
-            </Grid>
-        </Box>
     );
 };
 
