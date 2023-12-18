@@ -13,9 +13,14 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {faRightToBracket} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import image from "../../Pictures/heroimg.jpg"
+import {useContext, useEffect, useState} from "react";
+import * as FirebaseAuthService from "../../authService/FirebaseAuthService.ts"
+import {useNavigate} from "react-router-dom";
+import {LoginUserContext} from "../../App.tsx";
+import GoogleButton from 'react-google-button'
 
 function Copyright(props: any) {
+
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
@@ -36,14 +41,37 @@ const defaultTheme = createTheme({
 });
 
 export default function SignIn() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
+    const navigate = useNavigate();
+    const loginUser = useContext(LoginUserContext);
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(event.target.value);
+    }
+    const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(event.target.value);
+    }
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
             email: data.get('email'),
             password: data.get('password'),
         });
+        const loginResult = await FirebaseAuthService.handleSignInWithEmailAndPassword(email, password);
+        if(loginResult){
+            navigate(-1);
+        } else {[
+            alert("login failed")
+        ]}
     };
+
+    useEffect(()=> {
+        if(loginUser){
+            navigate("/")
+        }
+    }, [loginUser]);
 
     return (
         <ThemeProvider theme={defaultTheme}>
@@ -73,6 +101,8 @@ export default function SignIn() {
                             name="email"
                             autoComplete="email"
                             autoFocus
+                            onChange={handleEmailChange}
+                            value={email}
                         />
                         <TextField
                             margin="normal"
@@ -83,6 +113,8 @@ export default function SignIn() {
                             type="password"
                             id="password"
                             autoComplete="current-password"
+                            onChange={handlePasswordChange}
+                            value={password}
                         />
                         <FormControlLabel
                             control={<Checkbox value="remember" color="primary" />}
@@ -101,6 +133,11 @@ export default function SignIn() {
                                 <Link href="/signup" variant="body2">
                                     {"Don't have an account? Sign Up"}
                                 </Link>
+                            </Grid>
+                            <Grid item>
+                            <GoogleButton
+                                onClick={() => { FirebaseAuthService.handleSignInWithGoogle() }}
+                            />
                             </Grid>
                         </Grid>
                     </Box>

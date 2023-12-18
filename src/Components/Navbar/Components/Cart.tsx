@@ -1,5 +1,5 @@
 import React from "react";
-import Product from "../../../page/ProductPage/Components/Product.tsx";
+import Product from "./Product.tsx";
 
 const Cart = ({ onOrderedQuant, onReset, onShow }) => {
   return (

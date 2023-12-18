@@ -10,15 +10,10 @@ import ProductsBox from "./Components/ProductsBox.tsx";
 import {useNavigate} from "react-router-dom";
 
 const Home = () => {
-    const [quant, setQuant] = useState(0);
-    const [orderedQuant, setOrderedQuant] = useState(0);
     const [productList, setProductList] = useState();
     const navigate = useNavigate();
 
-    const resetQuant = () => {
-        setQuant(0);
-        setOrderedQuant(0);
-    };
+
     const getAllProduct = async () => {
         try{
         const data  = await ProductApi.getAllProduct();
@@ -35,7 +30,7 @@ const Home = () => {
 
     return(
         <Container component="section" maxWidth={"lg"}>
-        <Navbar onOrderedQuant={orderedQuant} onReset={resetQuant} />
+        <Navbar/>
         <Box>
             <HeroSection />
             {/* <Container> */}
