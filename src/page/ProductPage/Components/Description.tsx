@@ -1,49 +1,43 @@
-import React from "react";
+import React, {useContext} from "react";
 import QuantityButton from "./QuantityButton.tsx";
 import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { ProductDetailDto } from "../../../data/ProductDto.ts";
 import * as CartItemApi from "../../../api/CartItemApi.ts";
+import {useParams} from "react-router-dom";
+import { CartContext } from '../../../CartContext.tsx';
 
 type Props = {
     productDetail: ProductDetailDto | undefined;
     onQuant: number;
     onAdd: () => void;
     onRemove: () => void;
-    onSetOrderedQuant: (quantity: number) => void;
 }
 
-const Description = ({ onQuant, onAdd, onRemove, onSetOrderedQuant, productDetail }: Props) => {
+const Description = ({ productDetail, onQuant, onAdd, onRemove }: Props) => {
+    const { productId } = useParams();
+    const { getShoppingCartDataList } = useContext(CartContext);
+
+    const handleAddToCart = async () => {
+        if (productId) {
+            await CartItemApi.putCartItem(productId, onQuant);
+            getShoppingCartDataList(); // Refresh cart data
+        }
+    };
+
     if (!productDetail) {
-        return <div>Loading...</div>; // or any other placeholder
+        return <div>Loading...</div>;
     }
-    const putCartItem = async ()=> {
-        await CartItemApi.putCartItem("1", 3);
-    }
-    const handleAddToCart = () => {
-        // Call the function to update the ordered quantity
-        onSetOrderedQuant(onQuant);
-        putCartItem();
-
-        // Optional: Reset the quantity after adding to cart
-        // onRemove(); // Uncomment if you want to reset quantity to zero after adding to cart
-    }
-
 
     return (
         <section className="description">
             <p className="pre">Fruit Store</p>
             <h1>{productDetail.name}</h1>
             <p className="desc">{productDetail.description}</p>
-            <div className="main-tag">
-                ${productDetail.price}
-            </div>
+            <div className="main-tag">${productDetail.price}</div>
             <div className="buttons">
                 <QuantityButton onQuant={onQuant} onRemove={onRemove} onAdd={onAdd} />
-                <button
-                    className="add-to-cart"
-                    onClick={handleAddToCart}
-                >
+                <button className="add-to-cart" onClick={handleAddToCart}>
                     <FontAwesomeIcon icon={faCartShopping} />
                     Add to Cart
                 </button>

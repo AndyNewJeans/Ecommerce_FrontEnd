@@ -4,20 +4,16 @@ import { Container } from "@mui/material";
 import Navbar from "../../Components/Navbar/Navbar.tsx";
 import Gallery from "./Components/Gallery.tsx";
 import Description from "./Components/Description.tsx";
-import {useNavigate, useParams} from "react-router-dom";
-import mockData from "../../response.json";
+import { useParams, useNavigate } from "react-router-dom";
 import { ProductDetailDto } from "../../data/ProductDto.ts";
-import * as ProductApi from "../../api/ProductApi.ts"
-type Params = {
-    productId: string;
-}
+import * as ProductApi from "../../api/ProductApi.ts";
 
 function ProductPage() {
     const [quant, setQuant] = useState(0);
-    const [orderedQuant, setOrderedQuant] = useState(0);
-    const { productId } = useParams<Params>();
+    const { productId } = useParams();
     const [productDetail, setProductDetail] = useState<ProductDetailDto | undefined>(undefined);
     const navigate = useNavigate();
+
     const addQuant = () => {
         setQuant(quant + 1);
     };
@@ -25,27 +21,28 @@ function ProductPage() {
     const removeQuant = () => {
         setQuant(quant > 0 ? quant - 1 : 0);
     };
+
     const getProductDetail = async () => {
-        try{
-            const data  = await ProductApi.getProductDetail(productId);
+        try {
+            const data = await ProductApi.getProductDetail(productId);
             setProductDetail(data);
-        }
-        catch (err){
+        } catch (err) {
             navigate("/404");
         }
-    }
+    };
+
     useEffect(() => {
-        if(productId){
-            getProductDetail(productId);
+        if (productId) {
+            getProductDetail();
         } else {
             navigate("/404");
         }
-    }, []);
+    }, [productId]);
 
     return (
         <main className="ProductPage">
             <Container component="section" maxWidth={"lg"}>
-                <Navbar onOrderedQuant={orderedQuant} onReset={() => setQuant(0)} />
+                <Navbar />
                 <section className="core">
                     {productDetail && (
                         <>
@@ -54,7 +51,6 @@ function ProductPage() {
                                 onQuant={quant}
                                 onAdd={addQuant}
                                 onRemove={removeQuant}
-                                onSetOrderedQuant={setOrderedQuant}
                                 productDetail={productDetail}
                             />
                         </>

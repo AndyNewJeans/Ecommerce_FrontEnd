@@ -12,6 +12,7 @@ import Error from "./page/Error/Error.tsx";
 import {UserData} from "./data/UserDto.ts";
 import * as FirebaseAuthService from "./authService/FirebaseAuthService.ts"
 import ShoppingCart from "./page/ShoppingCart/ShoppingCart.tsx";
+import { CartProvider } from './CartContext';
 
 export const LoginUserContext = createContext<UserData|undefined|null>(undefined)
 
@@ -55,9 +56,11 @@ function App() {
 
     return (
         <React.StrictMode>
+            <CartProvider>
             <LoginUserContext.Provider value={loginUser}>
             <RouterProvider router={router} />
             </LoginUserContext.Provider>
+            </CartProvider>
         </React.StrictMode>
     );
 }

@@ -18,7 +18,7 @@ export default function Error() {
             <Container maxWidth="md">
                 <Navbar/>
                 <Grid container spacing={2}>
-                    <Grid xs={6}>
+                    <Grid item xs={6}>
                         <Typography variant="h1">
                             404
                         </Typography>

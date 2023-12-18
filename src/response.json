@@ -1,7 +1,34 @@
-{
-  "name": "蔬果屋 - 新鮮檸檬（5個裝）",
-  "description": "「由於產品是每天新鮮直送，為保持品質，恕不接受更改送貨日期或時段。如客人選擇門市自取，請盡快於一天內取貨。」\n\n新鮮檸檬（5個裝）\n\n我司出售新鮮蔬菜水果，為您提供優質的服務與品質。如收到劣質蔬菜水果，請立即拍照並盡快申請退款，我們將根據情況立即提供退款服務。\n請收到貨品後存放於適當溫度下及在2-4日內食用會有更好的體驗！由於產品是每天新鮮直送，為保持品質，恕不接受更改送貨日期或時段",
-  "image_url": "https://cdn-mms.hktvmall.com/hktv/mms/uploadProductImage/5c52/5d18/9761/TVdfGYIoRd20220207004931_1200.jpg",
-  "price": 20.00,
-  "stock": 68
-}
+[
+  {
+    "user": {
+      "uid": 1,
+      "firebaseUid": "YbxpP04eZcQHu50zjqpQXlkYfFj1",
+      "email": "user@user.com"
+    },
+    "product": {
+      "pid": 1,
+      "name": "Mix n Fresh - 日本南瓜 (日本種墨西哥產)",
+      "description": "南瓜所含果膠還可以保護胃膠道粘膜，免受粗糙食品刺激，促進潰瘍癒合，適宜於胃病患者。南瓜所含成分能促進膽汁分泌，加強胃腸蠕動，幫助食物消化",
+      "imageUrl": "https://images.hktv-img.com/images/HKTV/20648/800071_main_28868592_20190816132807_01_1200.jpg",
+      "price": 20.00,
+      "stock": 48
+    },
+    "quantity": 14
+  },
+  {
+    "user": {
+      "uid": 1,
+      "firebaseUid": "YbxpP04eZcQHu50zjqpQXlkYfFj1",
+      "email": "user@user.com"
+    },
+    "product": {
+      "pid": 2,
+      "name": "蔬果屋 - 新鮮檸檬（5個裝）",
+      "description": "「由於產品是每天新鮮直送，為保持品質，恕不接受更改送貨日期或時段。如客人選擇門市自取，請盡快於一天內取貨。」\n\n新鮮檸檬（5個裝）\n\n我司出售新鮮蔬菜水果，為您提供優質的服務與品質。如收到劣質蔬菜水果，請立即拍照並盡快申請退款，我們將根據情況立即提供退款服務。\n請收到貨品後存放於適當溫度下及在2-4日內食用會有更好的體驗！由於產品是每天新鮮直送，為保持品質，恕不接受更改送貨日期或時段",
+      "imageUrl": "https://cdn-mms.hktvmall.com/hktv/mms/uploadProductImage/5c52/5d18/9761/TVdfGYIoRd20220207004931_1200.jpg",
+      "price": 20.00,
+      "stock": 68
+    },
+    "quantity": 5
+  }
+]

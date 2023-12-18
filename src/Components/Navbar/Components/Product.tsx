@@ -1,31 +1,38 @@
-import { IconButton } from "@mui/material";
-import React from "react";
-import thumb1 from "../../../Pictures/image-product-1-thumbnail.jpg";
-import deleteIcon from "../../../Pictures/icon-delete.svg";
+import React from 'react';
+import { IconButton } from '@mui/material';
+import deleteIcon from '../../../Pictures/icon-delete.svg';
+import { CartItemDto } from '../../../data/CartItemDto.ts';
 
-const PRICE = 50;
+type Props = {
+    cartItemDto: CartItemDto;
+    onReset: () => void; // Assuming this is a function to reset something in the parent component
+};
 
-const Product = ({ onOrderedQuant, onReset }) => {
-  return (
-    <div className="product">
-      <img src={thumb1} alt="product-thumbnail" />
-      <div className="info">
-        <p>余仁生 - 極品冰糖燕窩．小燕宴</p>
-        <div className="price">
-          <span> {`$${PRICE.toFixed(2)} x ${onOrderedQuant}`} </span>
-          <span> {`$${(PRICE * onOrderedQuant).toFixed(2)}`} </span>
+const Product = ({ cartItemDto, onReset }: Props) => {
+    // Use cartItemDto to get the price and ordered quantity
+    const price = cartItemDto.product.price;
+    const orderedQuant = cartItemDto.quantity;
+
+    return (
+        <div className='product'>
+            <img src={cartItemDto.product.imageUrl} alt='product-thumbnail' />
+            <div className='info'>
+                <div>{cartItemDto.product.name}</div>
+                <div className='price'>
+                    <div>{`$${price.toFixed(2)} x ${orderedQuant}`}</div>
+                    <div>{`$${(price * orderedQuant).toFixed(2)}`}</div>
+                </div>
+            </div>
+            <IconButton
+                className='delete-button'
+                size='small'
+                disableRipple
+                // onClick={() => onReset(cartItemDto.id)} // Assuming onReset needs an ID to identify which item to reset
+            >
+                <img src={deleteIcon} alt='delete-item' />
+            </IconButton>
         </div>
-      </div>
-      <IconButton
-        className="delete-button"
-        size="small"
-        disableRipple
-        onClick={onReset}
-      >
-        <img src={deleteIcon} alt="delete-item" />
-      </IconButton>
-    </div>
-  );
+    );
 };
 
 export default Product;
