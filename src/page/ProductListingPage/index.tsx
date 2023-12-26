@@ -35,9 +35,6 @@ const Home = () => {
             <HeroSection />
             {/* <Container> */}
             <Stack>
-                <Box>
-                    <Categories />
-                </Box>
                 <ProductsBox products={productList}/>
             </Stack>
             {/* </Container> */}

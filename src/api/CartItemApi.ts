@@ -31,3 +31,31 @@ export const getCartItemList = async():Promise<CartItemDto[]> => {
         throw error;
     }
 }
+
+export const patchCartItem = async (pid: number, quantity: number) => {
+    try {
+        const accessToken = await FirebaseAuthService.getAccessToken();
+        if (!accessToken) {
+            throw new Error();
+        }
+        const config = {headers: {Authorization: `Bearer ${accessToken}`}}
+        await axios.patch(`${baseUrl}/cart/${pid}/${quantity}`, null, config);
+    } catch (error){
+        console.error(error);
+        throw error;
+    }
+}
+
+export const deleteCartItem = async (pid: number) => {
+    try {
+        const accessToken = await FirebaseAuthService.getAccessToken();
+        if (!accessToken) {
+            throw new Error();
+        }
+        const config = {headers: {Authorization: `Bearer ${accessToken}`}}
+        await axios.delete(`${baseUrl}/cart/${pid}`, config);
+    } catch (error){
+        console.error(error);
+        throw error;
+    }
+}

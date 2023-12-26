@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { styled } from '@mui/material/styles';
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -6,6 +6,9 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import {CartContext} from "../../../CartContext.tsx";
+import {useNavigate} from "react-router-dom";
+import {CartItemDto} from "../../../data/CartItemDto.ts";
 
 // Styled components
 const StyledCard = styled(Card)({
@@ -14,39 +17,44 @@ const StyledCard = styled(Card)({
     minWidth: "275px",
     elevation: 15
 });
+type Props = {
+    cartDataList: CartItemDto[];
+}
 
-const StyledTypographyTitle = styled(Typography)({
-    fontSize: 14
-});
+const OrderSumaryItem = ({ cartDataList }: Props) => {
+    const navigate = useNavigate();
+    const { getShoppingCartDataList } = useContext(CartContext);
 
-const StyledTypographySubtitle = styled(Typography)({
-    marginBottom: 12
-});
+    const totalPrice = cartDataList.reduce((total, item) => {
+        return total + (item.product.price * item.quantity);
+    }, 0);
 
-export default function OrderSummaryItem() {
     return (
+
         <StyledCard>
             <CardContent>
-                <StyledTypographyTitle
-                    color="textSecondary"
-                    gutterBottom
-                >
-                    Shopping Cart
-                </StyledTypographyTitle>
                 <Typography variant="h5" component="h1">
                     Order Summary
                 </Typography>
                 <hr />
                 <Grid container>
-                    {/* ... Grid Items for Shipping and Total */}
+                    Total: ${totalPrice.toFixed(2)}
                 </Grid>
             </CardContent>
 
             <CardActions>
-                <Button size="large" color="secondary">
-                    BUY NOW ({1})
-                </Button>
+                <section className='cart'>
+                <div className='cart-content'>
+                <button
+                    className='checkout'
+                    onClick={() => navigate("/checkout")} // Change this to your checkout route
+                >
+                    checkout
+                </button>
+                </div>
+                </section>
             </CardActions>
         </StyledCard>
     );
 }
+export default OrderSumaryItem;

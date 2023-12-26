@@ -1,48 +1,183 @@
-import React from "react";
-import { styled } from '@mui/material/styles';
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
+// ShoppingCartItem.js
+import React, {useContext, useEffect, useState} from "react";
+import {
+    Box,
+    Button,
+    Card,
+    CardActions,
+    CardContent,
+    CardMedia,
+    Grid,
+    IconButton,
+    styled,
+    Typography
+} from "@mui/material";
+import deleteIcon from "../../../Pictures/icon-delete.svg";
+import {CartItemDto} from "../../../data/CartItemDto.ts";
+import "../../../App.css"
+import QuantityButton from "../../ProductPage/Components/QuantityButton.tsx";
+import * as CartItemApi from "../../../api/CartItemApi.ts";
+import {LoginUserContext} from "../../../App.tsx";
+import {Link, useNavigate} from "react-router-dom";
+import Loading from "../../../Components/Loading.tsx";
+import {CartContext} from "../../../CartContext.tsx";
 
-// Styled components
 const StyledCard = styled(Card)({
-    display: "flex",
-    marginTop: 15
-});
-
-const StyledCardContent = styled(CardContent)({
-    flex: "1 0 auto"
-});
-
-const StyledCardMedia = styled(CardMedia)({
-    width: 151
+    backgroundColor: '#8bc34a',
+    transition: 'transform 0.15s ease-in-out',
+    '&:hover': {
+        transform: 'scale3d(1.05, 1.05, 1)'
+    },
+    display: 'flex',
+    flexDirection: 'column', // Ensures the content dictates the card's size
 });
 
 const StyledTypography = styled(Typography)({
-    fontWeight: "bold"
+    fontSize: '18px', overflow: "hidden",
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
+    WebkitLineClamp: "2",
+    WebkitBoxOrient: "vertical",
+    fontFamily: "Kumbh Sans"
 });
 
-export default function ShoppingCartItem() {
+const StyledTypography2 = styled(Typography)({
+    fontSize: '12px', overflow: "hidden",
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
+    WebkitLineClamp: "2",
+    WebkitBoxOrient: "vertical",
+    fontFamily: "Kumbh Sans"
+});
+
+const StyledCardContent = styled(CardContent)({
+    overflow: 'visible', // Allows content to determine the size
+    '& .MuiTypography-root': {
+        wordWrap: 'break-word',
+    },
+    // Removed the fixed height to allow the content to define its own height
+});
+
+const StyledDeleteButton = styled(IconButton)({
+    position: 'absolute',
+    top: '8px', // Adjust the value as needed to match your design
+    right: '8px', // Adjust the value as needed to match your design
+    padding: '8px',
+    margin: '0', // Set to 0 to align it with the card edges, adjust if necessary
+    backgroundColor: 'rgba(255, 255, 255)', // You can adjust the background if needed
+    borderRadius: '50%', // Optional: if you want it to be round
+    // Set a higher z-index to ensure it's above other elements inside the card
+    zIndex: 2,
+    // Other styles...
+});
+
+type Props = {
+    cartItemDto: CartItemDto;
+};
+
+const ShoppingCartItem = ({cartItemDto}: Props) => {
+    const [quant, setQuant] = useState(cartItemDto.quantity);
+    const [timer, setTimer] = useState(null);
+    const loginUser = useContext(LoginUserContext);
+    const { getShoppingCartDataList } = useContext(CartContext);
+    const price = cartItemDto.product.price;
+    const orderedQuant = cartItemDto.quantity;
+
+    const navigate = useNavigate();
+
+    const handlePatchToCart = async () => {
+        if (loginUser) {
+
+        } else if (loginUser === null) {
+            navigate('/login'); // Navigate to login page if user is not logged in
+            return; // Prevent further execution
+        }
+        if (cartItemDto.product.pid) {
+            await CartItemApi.patchCartItem(cartItemDto.product.pid, quant);
+            getShoppingCartDataList(); // Refresh cart data
+        }
+    }
+
+    const handleDeleteCart = async () => {
+        if (loginUser) {
+
+        } else if (loginUser === null) {
+            navigate('/login'); // Navigate to login page if user is not logged in
+            return; // Prevent further execution
+        }
+        if (cartItemDto.product.pid) {
+            await CartItemApi.deleteCartItem(cartItemDto.product.pid);
+            getShoppingCartDataList(); // Refresh cart data
+        }
+    }
+
+    const handleChange = (newQuant) => {
+        setQuant(newQuant);
+    };
+
+    // Clean up the timer when the component unmounts
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            if (quant !== cartItemDto.quantity) {
+                handlePatchToCart();
+            }
+        }, 2000);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [quant, cartItemDto.quantity]);
+
+
+    const addQuant = () => {
+        handleChange(quant + 1);
+    };
+
+    const removeQuant = () => {
+        handleChange(quant > 0 ? quant - 1 : 0);
+    };
+
     return (
-        <StyledCard>
-            <StyledCardMedia
-                image="https://source.unsplash.com/random"
-                title="Live from space album cover"
-            />
-            <StyledCardContent>
-                <Typography color="textSecondary" gutterBottom>
-                    Category
-                </Typography>
-                <Typography variant="h5" component="h2">
-                    Item Name
-                </Typography>
-                <hr />
-                <Grid container>
-                    {/* ... Grid Items for Size, Quantity, and Price */}
-                </Grid>
-            </StyledCardContent>
-        </StyledCard>
+        <Grid item md={4} sm={6} xs={12} style={{height: 'auto'}} key={cartItemDto.product.pid}>
+            <StyledCard sx={{maxWidth: 345, m: {xs: 2, sm: 1}}}>
+                <Link to={`/product/${cartItemDto.product.pid}`} style={{textDecoration: 'none'}}>
+                    <CardMedia
+                        component="img"
+                        height="260"
+                        image={cartItemDto.product.imageUrl}
+                        alt="product image"
+                        sx={{
+                            p: 1, backgroundRepeat: "no-repeat",
+                            backgroundPosition: "center",
+                            backgroundSize: "cover"
+                        }}
+                    />
+                </Link>
+                <StyledCardContent>
+                    <StyledTypography gutterBottom variant="h5" component="div">
+                        {cartItemDto.product.name}
+                    </StyledTypography>
+                    <StyledTypography2 gutterBottom variant="h5" component="div">
+                        <section className="description">
+                            <div className="buttons">
+                                <QuantityButton onQuant={quant} onRemove={removeQuant} onAdd={addQuant}/>
+                                {`$${price.toFixed(2)} x ${orderedQuant}`}
+                                <br/>
+                                Subtotal: {`$${(price * orderedQuant).toFixed(2)}`}
+                            </div>
+                        </section>
+                    </StyledTypography2>
+                    <StyledDeleteButton
+                        className='delete-button'
+                        disableRipple
+                        onClick={handleDeleteCart} // Assuming onReset needs an ID to identify which item to reset
+                    >
+                        <img src={deleteIcon} alt='delete-item'/>
+                    </StyledDeleteButton>
+                </StyledCardContent>
+            </StyledCard>
+        </Grid>
     );
-}
+};
+
+export default ShoppingCartItem;
