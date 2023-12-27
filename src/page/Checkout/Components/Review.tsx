@@ -4,64 +4,63 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
-
-const products = [
-    {
-        name: 'Product 1',
-        desc: 'A nice thing',
-        price: '$9.99',
-    },
-    {
-        name: 'Product 2',
-        desc: 'Another thing',
-        price: '$3.45',
-    },
-    {
-        name: 'Product 3',
-        desc: 'Something else',
-        price: '$6.51',
-    },
-    {
-        name: 'Product 4',
-        desc: 'Best thing of all',
-        price: '$14.11',
-    },
-    { name: 'Shipping', desc: '', price: 'Free' },
-];
-const addresses = ['1 MUI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
-
+import Box from '@mui/material/Box';
+import mockData from '../../../response.json'
+import {useEffect, useState} from "react";
+import {TransactionDto, Item, Product} from "../../../data/TransactionDto.ts"
+import {useNavigate, useParams} from "react-router-dom";
+import * as TransactionApi from "../../../api/TransactionApi.ts"
+type Params = {
+    transactionId:string
+}
 
 export default function Review() {
+    const params = useParams<Params>()
+    const [transactionData, setTransactionData] = useState<TransactionDto | undefined>(undefined);
+    const navigate = useNavigate();
+
+    let total = 0;
+
+    if (transactionData && transactionData.items) {
+        total = transactionData.items.reduce((sum, item) => sum + item.subtotal, 0);
+    }
+    const getTransactionData = async() =>{
+        if(params.transactionId){
+        const data = await TransactionApi.getTransactionById(params.transactionId);
+        setTransactionData(data);
+        } else {
+
+        }
+    }
+
+    useEffect(()=>{
+        getTransactionData()
+    }, []);
+
     return (
         <React.Fragment>
             <Typography variant="h6" gutterBottom>
-    Order summary
-    </Typography>
-    <List disablePadding>
-    {products.map((product) => (
-            <ListItem key={product.name} sx={{ py: 1, px: 0 }}>
-    <ListItemText primary={product.name} secondary={product.desc} />
-    <Typography variant="body2">{product.price}</Typography>
-        </ListItem>
-))}
-    <ListItem sx={{ py: 1, px: 0 }}>
-    <ListItemText primary="Total" />
-    <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-    $34.06
-    </Typography>
-    </ListItem>
-    </List>
-    <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
-    <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
-    Shipping
-    </Typography>
-    <Typography gutterBottom>John Smith</Typography>
-    <Typography gutterBottom>{addresses.join(', ')}</Typography>
-    </Grid>
-    <Grid item container direction="column" xs={12} sm={6}>
-    </Grid>
-    </Grid>
-    </React.Fragment>
-);
+                Order summary
+            </Typography>
+            <List disablePadding>
+                {transactionData?.items.map((item:Item) => (
+                    <ListItem key={item.tpid} sx={{ py: 1, px: 0 }}>
+                        <Box sx={{ marginRight: 2 }}>
+                            {item.product.imageUrl && (
+                                <img src={item.product.imageUrl} alt={item.product.name} style={{ height: '60px' }} />
+                            )}
+                        </Box>
+                        <ListItemText primary={item.product.name} secondary={item.product.description} />
+                        <Typography variant="body2">${item.subtotal.toFixed(2)}</Typography>
+                    </ListItem>
+                ))}
+                <ListItem sx={{ py: 1, px: 0 }}>
+                    <ListItemText primary="Total" />
+                    <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                        ${total.toFixed(2)}
+                    </Typography>
+                </ListItem>
+            </List>
+        </React.Fragment>
+    );
 }

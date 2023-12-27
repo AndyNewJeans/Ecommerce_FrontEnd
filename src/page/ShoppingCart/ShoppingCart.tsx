@@ -1,34 +1,53 @@
-// ShoppingCart.js
-import React, { useContext } from "react";
+import React, {useContext, useState} from "react";
 import {  Container, Grid } from "@mui/material";
-import ShoppingCartItem from "./Components/ShoppingCartItem.tsx";
 import OrderSummaryItem from "./Components/OrderSummary.tsx";
 import Navbar from "../../Components/Navbar/Navbar.tsx";
 import { CartContext } from "../../CartContext.tsx";
 import ShoppingCartItemBox from "./Components/ShoppingCartItemBox.tsx";
-import Product from "../../Components/Navbar/Components/Product.tsx";
+import * as TransactionApi from "../../api/TransactionApi.ts"
+import {useNavigate} from "react-router-dom";
+
+// ... existing imports ...
+
+// ... existing imports ...
 
 const ShoppingCart = () => {
+    const [isCheckout, setIsCheckout] = useState<boolean>(false);
     const { cartDataList } = useContext(CartContext);
     const isCartEmpty = cartDataList.length === 0;
+    const navigate = useNavigate();
 
-return (
-    <Container component="section" maxWidth="lg">
-        <Navbar />
-        <section className='cart'>
-            <div className='cart-content'>
-                {!isCartEmpty ? (
-                    <ShoppingCartItemBox cartDataList={cartDataList}/>
-                ) : (
-                    <p className='empty'>Your Cart Is Empty</p>
-                )}
-            </div>
-            <Grid item xs={12} md={5}>
-                <OrderSummaryItem cartDataList={cartDataList} />
-            </Grid>
-        </section>
-    </Container>
-);
+    const handleCheckout = async () => {
+        setIsCheckout(true); // Set isCheckout to true when checkout is initiated
+        try {
+            const transactionData = await TransactionApi.prepareTransaction();
+            navigate(`/checkout/${transactionData.tid}`);
+        } catch (error) {
+            navigate("/404");
+        }
+    };
+
+    return (
+        <Container component="section" maxWidth="lg">
+            <Navbar />
+            <section className='cart'>
+                <div className='cart-content'>
+                    {!isCartEmpty ? (
+                        <ShoppingCartItemBox cartDataList={cartDataList} />
+                    ) : (
+                        <p className='empty'>Your Cart Is Empty</p>
+                    )}
+                </div>
+                    <OrderSummaryItem
+                        cartDataList={cartDataList}
+                        checkout={handleCheckout}
+                        isCheckoutState={isCheckout} // Pass isCheckout as prop
+                    />
+            </section>
+        </Container>
+    );
 };
 
 export default ShoppingCart;
+
+

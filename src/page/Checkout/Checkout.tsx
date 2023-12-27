@@ -13,19 +13,11 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import AddressForm from './Components/AddressForm.tsx';
 import Review from './Components/Review';
-import Navbar from "../../Components/Navbar/Navbar.tsx";
+import {useNavigate, useParams} from "react-router-dom";
+import * as TransactionApi from "../../api/TransactionApi.ts"
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="/">
-                Fruit Store
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
+type Params = {
+    transactionId:string
 }
 
 const steps = ['Shipping address', 'Review your order'];
@@ -41,8 +33,12 @@ function getStepContent(step: number) {
     }
 }
 
+
 export default function Checkout() {
+    const [isButtonDisabled, setIsButtonDisabled] = React.useState(false);
+    const params = useParams<Params>()
     const [activeStep, setActiveStep] = React.useState(0);
+    const navigate = useNavigate();
 
     const handleNext = () => {
         setActiveStep(activeStep + 1);
@@ -50,6 +46,26 @@ export default function Checkout() {
 
     const handleBack = () => {
         setActiveStep(activeStep - 1);
+    };
+
+    const handleCheckout = async () => {
+        try{
+            if(params.transactionId){
+                await TransactionApi.payTransactionById(params.transactionId);
+                await TransactionApi.finishTransactionById(params.transactionId);
+            }
+        } catch(error){
+            navigate("/404");
+        }
+    }
+    const handleClick = async () => {
+        if (activeStep === steps.length - 1) {
+            setIsButtonDisabled(true)
+            await handleCheckout();
+            handleNext();
+        } else {
+            handleNext();
+        }
     };
 
     return (
@@ -71,11 +87,6 @@ export default function Checkout() {
                             <Typography variant="h5" gutterBottom>
                                 Thank you for your order.
                             </Typography>
-                            <Typography variant="subtitle1">
-                                Your order number is #2001539. We have emailed your order
-                                confirmation, and will send you an update when your order has
-                                shipped.
-                            </Typography>
                         </React.Fragment>
                     ) : (
                         <React.Fragment>
@@ -88,7 +99,7 @@ export default function Checkout() {
                                 )}
                                 <Button
                                     variant="contained"
-                                    onClick={handleNext}
+                                    onClick={handleClick}
                                     sx={{ mt: 3, ml: 1 }}
                                 >
                                     {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
@@ -97,7 +108,6 @@ export default function Checkout() {
                         </React.Fragment>
                     )}
                 </Paper>
-                <Copyright />
             </Container>
         </React.Fragment>
     );

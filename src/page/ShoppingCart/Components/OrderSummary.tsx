@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import { styled } from '@mui/material/styles';
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -19,42 +19,30 @@ const StyledCard = styled(Card)({
 });
 type Props = {
     cartDataList: CartItemDto[];
+    checkout: ()=>void;
+    isCheckoutState: boolean
 }
 
-const OrderSumaryItem = ({ cartDataList }: Props) => {
-    const navigate = useNavigate();
-    const { getShoppingCartDataList } = useContext(CartContext);
 
+const OrderSummaryItem = ({ cartDataList, checkout, isCheckoutState }: Props) => {
     const totalPrice = cartDataList.reduce((total, item) => {
         return total + (item.product.price * item.quantity);
     }, 0);
 
     return (
-
-        <StyledCard>
-            <CardContent>
-                <Typography variant="h5" component="h1">
-                    Order Summary
-                </Typography>
-                <hr />
-                <Grid container>
-                    Total: ${totalPrice.toFixed(2)}
-                </Grid>
-            </CardContent>
-
-            <CardActions>
                 <section className='cart'>
-                <div className='cart-content'>
-                <button
-                    className='checkout'
-                    onClick={() => navigate("/checkout")} // Change this to your checkout route
-                >
-                    checkout
-                </button>
-                </div>
+                    <div className='cart-content'>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={checkout}
+                            disabled={isCheckoutState} // Disable button based on isCheckoutState
+                        >
+                            Checkout
+                        </Button>
+                    </div>
                 </section>
-            </CardActions>
-        </StyledCard>
     );
-}
-export default OrderSumaryItem;
+};
+
+export default OrderSummaryItem;

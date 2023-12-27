@@ -34,7 +34,7 @@ const router = createBrowserRouter([
         element:<SignUp/>
     },
     {
-        path:"/checkout",
+        path:"/checkout/:transactionId",
         element:<Checkout/>
     },
     {
