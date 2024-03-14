@@ -3,12 +3,10 @@ import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import mockData from '../../../response.json'
 import {useEffect, useState} from "react";
-import {TransactionDto, Item, Product} from "../../../data/TransactionDto.ts"
-import {useNavigate, useParams} from "react-router-dom";
+import {TransactionDto, Item} from "../../../data/TransactionDto.ts"
+import {useParams} from "react-router-dom";
 import * as TransactionApi from "../../../api/TransactionApi.ts"
 type Params = {
     transactionId:string
@@ -17,19 +15,16 @@ type Params = {
 export default function Review() {
     const params = useParams<Params>()
     const [transactionData, setTransactionData] = useState<TransactionDto | undefined>(undefined);
-    const navigate = useNavigate();
 
     let total = 0;
 
     if (transactionData && transactionData.items) {
         total = transactionData.items.reduce((sum, item) => sum + item.subtotal, 0);
     }
-    const getTransactionData = async() =>{
-        if(params.transactionId){
-        const data = await TransactionApi.getTransactionById(params.transactionId);
-        setTransactionData(data);
-        } else {
-
+    const getTransactionData = async() => {
+        if (params.transactionId) {
+            const data = await TransactionApi.getTransactionById(params.transactionId);
+            setTransactionData(data);
         }
     }
 

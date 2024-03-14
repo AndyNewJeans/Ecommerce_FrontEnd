@@ -1,8 +1,7 @@
-import React, {useState, useEffect, useContext} from "react";
+import {useState, useEffect, useContext} from "react";
 import "../../App.css";
 import { Container } from "@mui/material";
 import Navbar from "../../Components/Navbar/Navbar.tsx";
-import Gallery from "./Components/Gallery.tsx";
 import Description from "./Components/Description.tsx";
 import { useParams, useNavigate } from "react-router-dom";
 import { ProductDetailDto } from "../../data/ProductDto.ts";
@@ -12,7 +11,7 @@ import {CartContext} from "../../CartContext.tsx";
 import {LoginUserContext} from "../../App.tsx";
 
 function ProductPage() {
-    const [quant, setQuant] = useState(0);
+    const [quant, setQuant] = useState(1);
     const [isAddingCart, setIsAddingCart] = useState<boolean>(false)
     const { productId } = useParams();
     const [productDetail, setProductDetail] = useState<ProductDetailDto | undefined>(undefined);
@@ -22,9 +21,7 @@ function ProductPage() {
     const navigate = useNavigate();
 
     const handleAddToCart = async () => {
-        if (loginUser){
-
-        } else if (loginUser === null) {
+        if (loginUser === null) {
             navigate('/login'); // Navigate to login page if user is not logged in
             return; // Prevent further execution
         }
@@ -46,19 +43,21 @@ function ProductPage() {
 
     const getProductDetail = async () => {
         try {
-            const data = await ProductApi.getProductDetail(productId);
-            setProductDetail(data);
+            // Check if productId is defined and is a string
+            if (typeof productId === 'string') {
+                const data = await ProductApi.getProductDetail(productId);
+                setProductDetail(data);
+            } else {
+                // Handle the case where productId is undefined
+                navigate("/404");
+            }
         } catch (err) {
             navigate("/404");
         }
     };
 
     useEffect(() => {
-        if (productId) {
-            getProductDetail();
-        } else {
-            navigate("/404");
-        }
+        getProductDetail();
     }, [productId]);
 
     return (
@@ -68,7 +67,6 @@ function ProductPage() {
                 <section className="core">
                     {productDetail && (
                         <>
-                            <Gallery productDetail={productDetail} />
                             <Description
                                 onQuant={quant}
                                 onAdd={addQuant}

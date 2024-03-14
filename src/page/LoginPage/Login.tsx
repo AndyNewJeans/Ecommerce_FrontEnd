@@ -130,11 +130,6 @@ export default function SignIn() {
                         </Button>
                         <Grid container>
                             <Grid item>
-                                <Link href="/signup" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
-                            <Grid item>
                             <GoogleButton
                                 onClick={() => { FirebaseAuthService.handleSignInWithGoogle() }}
                             />

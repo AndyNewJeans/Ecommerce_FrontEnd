@@ -1,15 +1,12 @@
-import React from 'react';
 import Product from './Product.tsx';
 import { CartItemDto } from '../../../data/CartItemDto.ts';
 import {useNavigate} from "react-router-dom";
 
 type Props = {
     cartDataList: CartItemDto[];
-    onReset: (id: number) => void;
-    onShow: (show: boolean) => void; // Make sure to use this prop if it's needed
 };
 
-const Cart = ({ cartDataList, onReset, onShow }: Props) => {
+const Cart = ({ cartDataList,}: Props) => {
     const isCartEmpty = cartDataList.length === 0;
     const navigate = useNavigate();
 
@@ -25,7 +22,7 @@ const Cart = ({ cartDataList, onReset, onShow }: Props) => {
                 {!isCartEmpty ? (
                     <>
                         {cartDataList.map((item) => (
-                            <Product key={item.product.pid} cartItemDto={item} onReset={onReset} />
+                            <Product key={item.product.pid} cartItemDto={item}/>
                         ))}
                         <button
                             className='checkout'

@@ -1,4 +1,3 @@
-import React, {useContext} from "react";
 import QuantityButton from "./QuantityButton.tsx";
 import {faCartShopping, faSpinner} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -48,10 +47,11 @@ const Description = ({ productDetail, onQuant, onAdd, onRemove, handleAddToCart,
         <section className="description">
             <p className="pre">Fruit Store</p>
             <h1>{productDetail.name}</h1>
+            <img src={productDetail.image_url} alt={productDetail.name} style={{ height: '300px' }}/>
             <p className="desc">{productDetail.description}</p>
             <div className="main-tag">${productDetail.price}</div>
             <div className="buttons">
-                <QuantityButton onQuant={onQuant} onRemove={onRemove} onAdd={onAdd} />
+                <QuantityButton onQuant={onQuant} onRemove={onRemove} onAdd={onAdd} onQuantityChange={renderSelectorAndButton}/>
                 {renderSelectorAndButton()}
             </div>
         </section>

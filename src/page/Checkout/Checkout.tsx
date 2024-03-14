@@ -1,15 +1,11 @@
 import * as React from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import AddressForm from './Components/AddressForm.tsx';
 import Review from './Components/Review';
@@ -36,6 +32,7 @@ function getStepContent(step: number) {
 
 export default function Checkout() {
     const [isButtonDisabled, setIsButtonDisabled] = React.useState(false);
+    const [orderCompleted, setOrderCompleted] = React.useState(false);
     const params = useParams<Params>()
     const [activeStep, setActiveStep] = React.useState(0);
     const navigate = useNavigate();
@@ -53,19 +50,27 @@ export default function Checkout() {
             if(params.transactionId){
                 await TransactionApi.payTransactionById(params.transactionId);
                 await TransactionApi.finishTransactionById(params.transactionId);
+                setOrderCompleted(true);
             }
         } catch(error){
             navigate("/404");
         }
     }
+
     const handleClick = async () => {
-        if (activeStep === steps.length - 1) {
-            setIsButtonDisabled(true)
-            await handleCheckout();
-            handleNext();
-        } else {
-            handleNext();
+        if (!isButtonDisabled) {
+            if (activeStep === steps.length - 1) {
+                setIsButtonDisabled(true)
+                await handleCheckout();
+                handleNext();
+            } else {
+                handleNext();
+            }
         }
+    };
+
+    const handleToHome = () => {
+        navigate('/'); // Navigate to the index page
     };
 
     return (
@@ -87,6 +92,15 @@ export default function Checkout() {
                             <Typography variant="h5" gutterBottom>
                                 Thank you for your order.
                             </Typography>
+                            {orderCompleted && ( // Show button only when order is completed
+                                <Button
+                                    variant="contained"
+                                    onClick={handleToHome}
+                                    sx={{ mt: 3 }}
+                                >
+                                    Go to Home
+                                </Button>
+                            )}
                         </React.Fragment>
                     ) : (
                         <React.Fragment>

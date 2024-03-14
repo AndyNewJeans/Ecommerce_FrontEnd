@@ -1,7 +1,7 @@
-import React, {useCallback, useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import logo from "../../Pictures/logo.webp";
 import { Badge, Button, IconButton } from "@mui/material";
-import { faBars, faCartShopping, faRightFromBracket, faUser } from "@fortawesome/free-solid-svg-icons";
+import {faCartShopping, faRightFromBracket, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginUserContext } from "../../App.tsx";

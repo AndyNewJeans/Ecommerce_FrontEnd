@@ -1,6 +1,5 @@
 import {Box, Grid, Typography} from "@mui/material";
 import Loading from "../../../Components/Loading.tsx";
-import React from "react";
 import ShoppingCartItem from "./ShoppingCartItem.tsx";
 import {CartItemDto} from "../../../data/CartItemDto.ts";
 

@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import {
     Button,
     Card,
@@ -47,7 +46,7 @@ const Products = ({product}:Props) => {
                             backgroundSize: "cover" }}
                     />
                     <CardContent sx={{ height: '80px' }}>
-                        <StyledTypography gutterBottom variant="h5" component="div">
+                        <StyledTypography gutterBottom variant="h5">
                             {product.name}
                         </StyledTypography>
                     </CardContent>

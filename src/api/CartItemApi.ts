@@ -1,9 +1,10 @@
 import axios from "axios";
 import * as FirebaseAuthService from "../authService/FirebaseAuthService.ts"
 import {CartItemDto} from "../data/CartItemDto.ts";
+import getEnvConfig from "../config/EnvConfig.ts";
 
-const baseUrl = "http://localhost:8080"
-export const putCartItem = async (pid: number, quantity: number) => {
+const baseUrl = getEnvConfig().baseUrl;
+export const putCartItem = async (pid: string, quantity: number) => {
     try {
         const accessToken = await FirebaseAuthService.getAccessToken();
         if (!accessToken) {

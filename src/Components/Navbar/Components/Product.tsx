@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import {useContext} from 'react';
 import { IconButton } from '@mui/material';
 import deleteIcon from '../../../Pictures/icon-delete.svg';
 import { CartItemDto } from '../../../data/CartItemDto.ts';
@@ -9,10 +9,9 @@ import {useNavigate} from "react-router-dom";
 
 type Props = {
     cartItemDto: CartItemDto;
-    onReset: () => void; // Assuming this is a function to reset something in the parent component
 };
 
-const Product = ({ cartItemDto, onReset }: Props) => {
+const Product = ({ cartItemDto}: Props) => {
     // Use cartItemDto to get the price and ordered quantity
     const price = cartItemDto.product.price;
     const orderedQuant = cartItemDto.quantity;

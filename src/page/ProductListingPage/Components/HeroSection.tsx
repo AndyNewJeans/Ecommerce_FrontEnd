@@ -1,16 +1,16 @@
-import React from "react";
 import { Button, Grid, Typography } from "@mui/material";
 import heroimg from "../../../Pictures/heroimg.jpg";
 import { Box } from "@mui/system";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faShop} from "@fortawesome/free-solid-svg-icons";
+import {Link} from "react-router-dom";
 
 const HeroSection = () => {
     return (
         <Grid
             container
             spacing={2}
-            container direction="row"
+            direction="row"
             justifyContent="center"
             alignItems="center"
             sx={{backgroundColor:'#F8F9F8', height:'900'}}
@@ -53,7 +53,9 @@ const HeroSection = () => {
                     RIGHT NOW!
                 </Typography>
                 <Box p={3}>
+                    <Link to="/">
                     <Button id={"buttons"} variant="contained" sx={{padding:'10px 50px'}} style={{backgroundColor:"#438d20"}} ><FontAwesomeIcon icon={faShop} /></Button>
+                    </Link>
                 </Box>
             </Grid>
         </Grid>

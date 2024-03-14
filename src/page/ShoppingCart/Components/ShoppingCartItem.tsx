@@ -1,10 +1,6 @@
-// ShoppingCartItem.js
-import React, {useContext, useEffect, useState} from "react";
+import {useContext, useState} from "react";
 import {
-    Box,
-    Button,
     Card,
-    CardActions,
     CardContent,
     CardMedia,
     Grid,
@@ -19,7 +15,6 @@ import QuantityButton from "../../ProductPage/Components/QuantityButton.tsx";
 import * as CartItemApi from "../../../api/CartItemApi.ts";
 import {LoginUserContext} from "../../../App.tsx";
 import {Link, useNavigate} from "react-router-dom";
-import Loading from "../../../Components/Loading.tsx";
 import {CartContext} from "../../../CartContext.tsx";
 
 const StyledCard = styled(Card)({
@@ -77,7 +72,6 @@ type Props = {
 
 const ShoppingCartItem = ({cartItemDto}: Props) => {
     const [quant, setQuant] = useState(cartItemDto.quantity);
-    const [timer, setTimer] = useState(null);
     const loginUser = useContext(LoginUserContext);
     const { getShoppingCartDataList } = useContext(CartContext);
     const price = cartItemDto.product.price;
@@ -85,10 +79,14 @@ const ShoppingCartItem = ({cartItemDto}: Props) => {
 
     const navigate = useNavigate();
 
-    const handlePatchToCart = async () => {
-        if (loginUser) {
+    const handleQuantityBlur = () => {
+        if (quant !== cartItemDto.quantity) {
+            handlePatchToCart();
+        }
+    };
 
-        } else if (loginUser === null) {
+    const handlePatchToCart = async () => {
+        if (loginUser === null) {
             navigate('/login'); // Navigate to login page if user is not logged in
             return; // Prevent further execution
         }
@@ -99,9 +97,7 @@ const ShoppingCartItem = ({cartItemDto}: Props) => {
     }
 
     const handleDeleteCart = async () => {
-        if (loginUser) {
-
-        } else if (loginUser === null) {
+        if (loginUser === null) {
             navigate('/login'); // Navigate to login page if user is not logged in
             return; // Prevent further execution
         }
@@ -111,23 +107,9 @@ const ShoppingCartItem = ({cartItemDto}: Props) => {
         }
     }
 
-    const handleChange = (newQuant) => {
+    const handleChange = (newQuant:number) => {
         setQuant(newQuant);
     };
-
-    // Clean up the timer when the component unmounts
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            if (quant !== cartItemDto.quantity) {
-                handlePatchToCart();
-            }
-        }, 2000);
-
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [quant, cartItemDto.quantity]);
-
 
     const addQuant = () => {
         handleChange(quant + 1);
@@ -154,13 +136,13 @@ const ShoppingCartItem = ({cartItemDto}: Props) => {
                     />
                 </Link>
                 <StyledCardContent>
-                    <StyledTypography gutterBottom variant="h5" component="div">
+                    <StyledTypography gutterBottom variant="h5">
                         {cartItemDto.product.name}
                     </StyledTypography>
-                    <StyledTypography2 gutterBottom variant="h5" component="div">
+                    <StyledTypography2 gutterBottom variant="h5">
                         <section className="description">
                             <div className="buttons">
-                                <QuantityButton onQuant={quant} onRemove={removeQuant} onAdd={addQuant}/>
+                                <QuantityButton onQuant={quant} onRemove={removeQuant} onAdd={addQuant} onQuantityChange={handleQuantityBlur}/>
                                 {`$${price.toFixed(2)} x ${orderedQuant}`}
                                 <br/>
                                 Subtotal: {`$${(price * orderedQuant).toFixed(2)}`}

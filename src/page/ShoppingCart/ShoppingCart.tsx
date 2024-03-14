@@ -1,15 +1,11 @@
-import React, {useContext, useState} from "react";
-import {  Container, Grid } from "@mui/material";
+import {useContext, useState} from "react";
+import {  Container} from "@mui/material";
 import OrderSummaryItem from "./Components/OrderSummary.tsx";
 import Navbar from "../../Components/Navbar/Navbar.tsx";
 import { CartContext } from "../../CartContext.tsx";
 import ShoppingCartItemBox from "./Components/ShoppingCartItemBox.tsx";
 import * as TransactionApi from "../../api/TransactionApi.ts"
 import {useNavigate} from "react-router-dom";
-
-// ... existing imports ...
-
-// ... existing imports ...
 
 const ShoppingCart = () => {
     const [isCheckout, setIsCheckout] = useState<boolean>(false);

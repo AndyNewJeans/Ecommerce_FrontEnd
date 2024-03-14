@@ -1,16 +1,16 @@
 import { Box } from '@mui/material'
 import { Container, Stack } from '@mui/system'
-import React, {useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
 import HeroSection from './Components/HeroSection.tsx'
-import Categories from './Components/Categories.tsx'
 import "../../App.css"
 import Navbar from "../../Components/Navbar/Navbar.tsx";
 import * as ProductApi from '../../api/ProductApi.ts'
 import ProductsBox from "./Components/ProductsBox.tsx";
 import {useNavigate} from "react-router-dom";
+import {ProductDto} from "../../data/ProductDto.ts";
 
 const Home = () => {
-    const [productList, setProductList] = useState();
+    const [productList, setProductList] = useState<ProductDto[]>([]);
     const navigate = useNavigate();
 
 

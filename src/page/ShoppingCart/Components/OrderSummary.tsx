@@ -1,22 +1,8 @@
-import React, {useContext, useEffect, useState} from "react";
-import { styled } from '@mui/material/styles';
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid";
-import {CartContext} from "../../../CartContext.tsx";
-import {useNavigate} from "react-router-dom";
 import {CartItemDto} from "../../../data/CartItemDto.ts";
+import Typography from "@mui/material/Typography";
 
-// Styled components
-const StyledCard = styled(Card)({
-    position: "sticky",
-    top: "1rem",
-    minWidth: "275px",
-    elevation: 15
-});
+
 type Props = {
     cartDataList: CartItemDto[];
     checkout: ()=>void;
@@ -32,6 +18,9 @@ const OrderSummaryItem = ({ cartDataList, checkout, isCheckoutState }: Props) =>
     return (
                 <section className='cart'>
                     <div className='cart-content'>
+                        <Typography variant="h6" component="div">
+                            Total: <strong>${totalPrice.toFixed(2)}</strong>
+                        </Typography>
                         <Button
                             variant="contained"
                             color="primary"

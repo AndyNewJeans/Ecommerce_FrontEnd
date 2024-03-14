@@ -1,9 +1,11 @@
-import {ProductDto} from "../data/ProductDto.ts";
+import {ProductDetailDto, ProductDto} from "../data/ProductDto.ts";
 import axios from 'axios';
+import getEnvConfig from "../config/EnvConfig.ts";
 
+const baseUrl= getEnvConfig().baseUrl;
 export async function getAllProduct():Promise<ProductDto[]>{
     try{
-    const response = await axios.get<ProductDto[]>('http://localhost:8080/public/product');
+    const response = await axios.get<ProductDto[]>(`${baseUrl}/public/product`);
     return response.data;
     }
     catch(err){
@@ -12,9 +14,9 @@ export async function getAllProduct():Promise<ProductDto[]>{
     }
 }
 
-export async function getProductDetail(pid:string):Promise<ProductDto[]>{
+export async function getProductDetail(pid:string):Promise<ProductDetailDto>{
     try{
-        const response = await axios.get<ProductDto[]>(`http://localhost:8080/public/product/${pid}`);
+        const response = await axios.get<ProductDetailDto>(`${baseUrl}/public/product/${pid}`);
         return response.data;
     }
     catch(err){

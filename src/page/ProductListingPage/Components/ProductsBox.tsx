@@ -1,4 +1,3 @@
-import React from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import Products from "./Products.tsx";
 import { ProductDto } from "../../../data/ProductDto.ts";
