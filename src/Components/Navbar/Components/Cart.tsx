@@ -6,7 +6,7 @@ type Props = {
     cartDataList: CartItemDto[];
 };
 
-const Cart = ({ cartDataList,}: Props) => {
+const Cart = ({ cartDataList}: Props) => {
     const isCartEmpty = cartDataList.length === 0;
     const navigate = useNavigate();
 

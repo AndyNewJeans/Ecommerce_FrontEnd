@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -17,7 +16,6 @@ import {useContext, useEffect, useState} from "react";
 import * as FirebaseAuthService from "../../authService/FirebaseAuthService.ts"
 import {useNavigate} from "react-router-dom";
 import {LoginUserContext} from "../../App.tsx";
-import GoogleButton from 'react-google-button'
 
 function Copyright(props: any) {
 
@@ -128,13 +126,7 @@ export default function SignIn() {
                         >
                             Sign In
                         </Button>
-                        <Grid container>
-                            <Grid item>
-                            <GoogleButton
-                                onClick={() => { FirebaseAuthService.handleSignInWithGoogle() }}
-                            />
-                            </Grid>
-                        </Grid>
+                        <p>login: user1@user.com password:123456</p>
                     </Box>
                 </Box>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
