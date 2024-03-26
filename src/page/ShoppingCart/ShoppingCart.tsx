@@ -14,7 +14,7 @@ const ShoppingCart = () => {
     const navigate = useNavigate();
 
     const handleCheckout = async () => {
-        setIsCheckout(true); // Set isCheckout to true when checkout is initiated
+        setIsCheckout(true);
         try {
             const transactionData = await TransactionApi.prepareTransaction();
             navigate(`/checkout/${transactionData.tid}`);
@@ -37,7 +37,7 @@ const ShoppingCart = () => {
                     <OrderSummaryItem
                         cartDataList={cartDataList}
                         checkout={handleCheckout}
-                        isCheckoutState={isCheckout} // Pass isCheckout as prop
+                        isCheckoutState={isCheckout}
                     />
             </section>
         </Container>
