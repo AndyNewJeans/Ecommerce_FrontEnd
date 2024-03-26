@@ -33,11 +33,9 @@ const Home = () => {
         <Navbar/>
         <Box>
             <HeroSection />
-            {/* <Container> */}
             <Stack>
                 <ProductsBox products={productList}/>
             </Stack>
-            {/* </Container> */}
         </Box>
         </Container>
     )
