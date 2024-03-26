@@ -24,7 +24,7 @@ const StyledCard = styled(Card)({
         transform: 'scale3d(1.05, 1.05, 1)'
     },
     display: 'flex',
-    flexDirection: 'column', // Ensures the content dictates the card's size
+    flexDirection: 'column',
 });
 
 const StyledTypography = styled(Typography)({
@@ -55,15 +55,13 @@ const StyledCardContent = styled(CardContent)({
 
 const StyledDeleteButton = styled(IconButton)({
     position: 'absolute',
-    top: '8px', // Adjust the value as needed to match your design
-    right: '8px', // Adjust the value as needed to match your design
+    top: '8px',
+    right: '8px',
     padding: '8px',
-    margin: '0', // Set to 0 to align it with the card edges, adjust if necessary
-    backgroundColor: 'rgba(255, 255, 255)', // You can adjust the background if needed
-    borderRadius: '50%', // Optional: if you want it to be round
-    // Set a higher z-index to ensure it's above other elements inside the card
+    margin: '0',
+    backgroundColor: 'rgba(255, 255, 255)',
+    borderRadius: '50%',
     zIndex: 2,
-    // Other styles...
 });
 
 type Props = {
@@ -152,7 +150,7 @@ const ShoppingCartItem = ({cartItemDto}: Props) => {
                     <StyledDeleteButton
                         className='delete-button'
                         disableRipple
-                        onClick={handleDeleteCart} // Assuming onReset needs an ID to identify which item to reset
+                        onClick={handleDeleteCart}
                     >
                         <img src={deleteIcon} alt='delete-item'/>
                     </StyledDeleteButton>
