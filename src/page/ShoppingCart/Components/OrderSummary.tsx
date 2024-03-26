@@ -25,7 +25,7 @@ const OrderSummaryItem = ({ cartDataList, checkout, isCheckoutState }: Props) =>
                             variant="contained"
                             color="primary"
                             onClick={checkout}
-                            disabled={isCheckoutState} // Disable button based on isCheckoutState
+                            disabled={isCheckoutState}
                         >
                             Checkout
                         </Button>
